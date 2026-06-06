@@ -140,11 +140,52 @@
       display: flex; flex-direction: column; align-items: center;
       padding: 20px 0 60px;
     }
+    .globe-ring-wrap {
+      position: relative;
+      width: 380px; height: 380px;
+    }
     #globe-canvas {
       width: 380px; height: 380px;
       cursor: grab;
+      display: block;
+      position: relative; z-index: 1;
     }
     #globe-canvas:active { cursor: grabbing; }
+
+    /* Whirl rings */
+    .gw { position: absolute; border-radius: 50%; pointer-events: none; }
+    .gw-a {
+      inset: -32px;
+      background: conic-gradient(from 0deg,
+        transparent 0deg 195deg,
+        rgba(255,255,255,0.03) 195deg 250deg,
+        rgba(255,255,255,0.10) 250deg 305deg,
+        rgba(255,255,255,0.18) 305deg 338deg,
+        rgba(255,255,255,0.05) 338deg 354deg,
+        transparent 354deg 360deg);
+      animation: gspin 6s linear infinite;
+    }
+    .gw-b {
+      inset: -18px;
+      background: conic-gradient(from 130deg,
+        transparent 0deg 225deg,
+        rgba(255,255,255,0.04) 225deg 275deg,
+        rgba(255,255,255,0.13) 275deg 318deg,
+        rgba(255,255,255,0.04) 318deg 338deg,
+        transparent 338deg 360deg);
+      animation: gspin 4s linear infinite reverse;
+    }
+    .gw-c {
+      inset: -8px;
+      background: conic-gradient(from 250deg,
+        transparent 0deg 265deg,
+        rgba(255,255,255,0.05) 265deg 302deg,
+        rgba(255,255,255,0.15) 302deg 332deg,
+        rgba(255,255,255,0.04) 332deg 346deg,
+        transparent 346deg 360deg);
+      animation: gspin 2.8s linear infinite;
+    }
+    @keyframes gspin { to { transform: rotate(360deg); } }
     .globe-caption {
       margin-top: 20px; text-align: center;
       font-family: var(--font-m); font-size: 11px;
@@ -540,10 +581,15 @@
     </div>
 
     <div class="globe-wrap">
-      <canvas id="globe-canvas"></canvas>
+      <div class="globe-ring-wrap">
+        <div class="gw gw-a"></div>
+        <div class="gw gw-b"></div>
+        <div class="gw gw-c"></div>
+        <canvas id="globe-canvas"></canvas>
+      </div>
       <p class="globe-caption">
         <span class="lived">Rome · Vilnius</span> &nbsp;→&nbsp; <span class="current">Eindhoven ✦</span>
-        &nbsp;&nbsp;|&nbsp;&nbsp; More countries coming soon
+        &nbsp;&nbsp;|&nbsp;&nbsp; 20+ countries visited
       </p>
     </div>
 
@@ -1093,8 +1139,8 @@
       if (!canvas || typeof THREE === 'undefined') return;
 
       const W = 380, H = 380;
-      const scene    = new THREE.Scene();
-      const camera   = new THREE.PerspectiveCamera(45, W / H, 0.01, 100);
+      const scene  = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, W / H, 0.01, 100);
       camera.position.z = 2.6;
 
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
@@ -1104,46 +1150,49 @@
       // Lights
       scene.add(new THREE.AmbientLight(0xffffff, 0.12));
       const sun = new THREE.DirectionalLight(0xffffff, 0.85);
-      sun.position.set(5, 3, 5);
-      scene.add(sun);
+      sun.position.set(5, 3, 5); scene.add(sun);
       const fill = new THREE.DirectionalLight(0x4466aa, 0.25);
-      fill.position.set(-4, -2, -3);
-      scene.add(fill);
+      fill.position.set(-4, -2, -3); scene.add(fill);
 
       // Globe group
       const group = new THREE.Group();
       scene.add(group);
 
       // Sphere
-      const sphereGeo = new THREE.SphereGeometry(1, 64, 64);
-      const sphereMat = new THREE.MeshPhongMaterial({
-        color:     0x0d1521,
-        emissive:  0x040810,
-        shininess: 20,
-        specular:  0x112244,
-      });
-      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 64, 64),
+        new THREE.MeshPhongMaterial({
+          color: 0x0d1521, emissive: 0x040810, shininess: 20, specular: 0x112244,
+        })
+      );
       group.add(sphere);
 
       // Atmosphere
-      const atmoGeo = new THREE.SphereGeometry(1.09, 64, 64);
-      const atmoMat = new THREE.MeshPhongMaterial({
-        color: 0x1a4a8a,
-        side: THREE.BackSide,
-        transparent: true,
-        opacity: 0.18,
-      });
-      group.add(new THREE.Mesh(atmoGeo, atmoMat));
+      group.add(new THREE.Mesh(
+        new THREE.SphereGeometry(1.09, 64, 64),
+        new THREE.MeshPhongMaterial({
+          color: 0x1a4a8a, side: THREE.BackSide, transparent: true, opacity: 0.18,
+        })
+      ));
 
       // Grid lines
-      const gridGeo  = new THREE.SphereGeometry(1.002, 28, 18);
-      const wireGeo  = new THREE.WireframeGeometry(gridGeo);
-      const wireMat  = new THREE.LineBasicMaterial({
-        color: 0x1a3a6b, transparent: true, opacity: 0.1
-      });
-      group.add(new THREE.LineSegments(wireGeo, wireMat));
+      group.add(new THREE.LineSegments(
+        new THREE.WireframeGeometry(new THREE.SphereGeometry(1.002, 28, 18)),
+        new THREE.LineBasicMaterial({ color: 0x1a3a6b, transparent: true, opacity: 0.08 })
+      ));
 
-      // lat/lng → 3D
+      // ── Country classification ──
+      const FLASHING = new Set(['Netherlands']);
+      const LIVED    = new Set(['Italy', 'Lithuania']);
+      const VISITED  = new Set([
+        'Egypt','Turkey','Austria','Belgium','Bulgaria','Croatia',
+        'Estonia','Finland','Germany','Greece','Hungary','Latvia',
+        'Montenegro','Norway','Poland','Portugal','San Marino',
+        'Slovakia','Spain','United Kingdom','Vatican','Vatican City',
+        'Holy See',
+      ]);
+
+      // ── lat/lng → Vector3 ──
       function ll(lat, lng, r) {
         const phi   = (90 - lat) * Math.PI / 180;
         const theta = (lng + 180) * Math.PI / 180;
@@ -1154,52 +1203,50 @@
         );
       }
 
-      // Markers
-      // LIVED: bright accent — CURRENT: accent + pulse — VISITED: dim (add yours below)
-      const markerData = [
-        { lat: 51.4416, lng:  5.4697, color: 0xC8401F, size: 0.028, pulse: true,  name: 'Eindhoven' },
-        { lat: 41.9028, lng: 12.4964, color: 0xE8956D, size: 0.022, pulse: false, name: 'Rome' },
-        { lat: 54.6872, lng: 25.2797, color: 0xE8956D, size: 0.022, pulse: false, name: 'Vilnius' },
-        // VISITED — add your countries here with color: 0x445566, size: 0.014, pulse: false
-        // Example: { lat: 48.8566, lng: 2.3522, color: 0x445566, size: 0.014, pulse: false, name: 'Paris' },
-      ];
+      // ── Draw one polygon ring as a 3D line ──
+      const flashingMats = []; // track NL materials for pulsing
 
-      const markers = markerData.map(m => {
-        const pos  = ll(m.lat, m.lng, 1.012);
-        const normal = pos.clone().normalize();
+      function drawRing(ring, color, opacity, isFlashing) {
+        const pts = ring.map(([lng, lat]) => ll(lat, lng, 1.005));
+        if (pts.length < 2) return;
+        const geo = new THREE.BufferGeometry().setFromPoints(pts);
+        const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity });
+        sphere.add(new THREE.Line(geo, mat));
+        if (isFlashing) flashingMats.push(mat);
+      }
 
-        // Dot
-        const dotGeo = new THREE.SphereGeometry(m.size, 10, 10);
-        const dotMat = new THREE.MeshBasicMaterial({ color: m.color });
-        const dot    = new THREE.Mesh(dotGeo, dotMat);
-        dot.position.copy(pos);
-        sphere.add(dot);
-
-        // Pulse ring
-        let ring = null;
-        if (m.pulse) {
-          const rGeo = new THREE.RingGeometry(m.size * 1.4, m.size * 2.2, 24);
-          const rMat = new THREE.MeshBasicMaterial({
-            color: m.color, side: THREE.DoubleSide,
-            transparent: true, opacity: 0.7,
+      // ── Fetch GeoJSON and draw color-coded outlines ──
+      fetch('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson')
+        .then(r => r.json())
+        .then(geo => {
+          geo.features.forEach(feature => {
+            const name = feature.properties?.name || '';
+            let color, opacity, flashing;
+            if (FLASHING.has(name)) {
+              color = 0xC8401F; opacity = 0.95; flashing = true;
+            } else if (LIVED.has(name)) {
+              color = 0xE8956D; opacity = 0.85; flashing = false;
+            } else if (VISITED.has(name)) {
+              color = 0x6688aa; opacity = 0.55; flashing = false;
+            } else {
+              return; // don't draw unvisited countries
+            }
+            const { type, coordinates } = feature.geometry;
+            const polys = type === 'Polygon'
+              ? [coordinates[0]]
+              : coordinates.map(p => p[0]);
+            polys.forEach(ring => drawRing(ring, color, opacity, flashing));
           });
-          ring = new THREE.Mesh(rGeo, rMat);
-          ring.position.copy(pos);
-          ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
-          sphere.add(ring);
-        }
+        })
+        .catch(() => console.warn('GeoJSON unavailable'));
 
-        return { dot, ring, pulse: m.pulse };
-      });
-
-      // Interaction: drag to rotate
+      // ── Drag to rotate ──
       let isDragging = false, prevX = 0, prevY = 0;
       let autoRotate = true, autoTimer = null;
 
       canvas.addEventListener('mousedown', e => {
         isDragging = true; prevX = e.clientX; prevY = e.clientY;
-        autoRotate = false;
-        clearTimeout(autoTimer);
+        autoRotate = false; clearTimeout(autoTimer);
       });
       window.addEventListener('mouseup', () => {
         isDragging = false;
@@ -1207,10 +1254,8 @@
       });
       canvas.addEventListener('mousemove', e => {
         if (!isDragging) return;
-        const dx = e.clientX - prevX;
-        const dy = e.clientY - prevY;
-        group.rotation.y += dx * 0.008;
-        group.rotation.x += dy * 0.006;
+        group.rotation.y += (e.clientX - prevX) * 0.008;
+        group.rotation.x += (e.clientY - prevY) * 0.006;
         group.rotation.x = Math.max(-1.2, Math.min(1.2, group.rotation.x));
         prevX = e.clientX; prevY = e.clientY;
       });
@@ -1219,29 +1264,25 @@
         autoRotate = false; clearTimeout(autoTimer);
       });
       canvas.addEventListener('touchmove', e => {
-        const dx = e.touches[0].clientX - prevX;
-        const dy = e.touches[0].clientY - prevY;
-        group.rotation.y += dx * 0.008;
-        group.rotation.x += dy * 0.006;
+        group.rotation.y += (e.touches[0].clientX - prevX) * 0.008;
+        group.rotation.x += (e.touches[0].clientY - prevY) * 0.006;
         prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
       });
       canvas.addEventListener('touchend', () => {
         autoTimer = setTimeout(() => autoRotate = true, 2000);
       });
 
-      // Animate
+      // ── Animate ──
       function animate() {
         requestAnimationFrame(animate);
         if (autoRotate) group.rotation.y += 0.0025;
 
-        const t = Date.now() * 0.003;
-        markers.forEach(({ ring, pulse }) => {
-          if (pulse && ring) {
-            const s = 1 + 0.6 * Math.abs(Math.sin(t));
-            ring.scale.setScalar(s);
-            ring.material.opacity = 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(t));
-          }
-        });
+        // Pulse Netherlands outline
+        if (flashingMats.length) {
+          const t = Date.now() * 0.0025;
+          const pulse = 0.55 + 0.45 * Math.sin(t);
+          flashingMats.forEach(m => { m.opacity = pulse; });
+        }
 
         renderer.render(scene, camera);
       }
@@ -1256,8 +1297,8 @@
 
     /* ═══════════════════════ LAST.FM (optional) ═══════════════════════ */
     // Replace these with your real credentials
-    const LASTFM_USER    = 'giooooo11';
-    const LASTFM_API_KEY = '426d38ea661c3a0408dc588f669c4d5a';
+    const LASTFM_USER    = 'YOUR_LASTFM_USERNAME';
+    const LASTFM_API_KEY = 'YOUR_LASTFM_API_KEY';
 
     async function loadTracks(listId) {
       if (LASTFM_USER === 'YOUR_LASTFM_USERNAME') return;
