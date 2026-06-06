@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giorgio Maria Maioli</title>
+  <meta name="description" content="Giorgio Maria Maioli — MSc Data Science & AI at TU/e. Building things at the intersection of intelligence and everything else." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F7F5F1;
+      --dark:     #0E0E0C;
+      --fg:       #111111;
+      --accent:   #C8401F;
+      --accent2:  #E8956D;
+      --muted:    #88887F;
+      --border:   #E2DED8;
+      --card:     #FFFFFF;
+      --font-h:   'Space Grotesk', system-ui, sans-serif;
+      --font-b:   'Inter', system-ui, sans-serif;
+      --font-m:   'JetBrains Mono', monospace;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font-b);
+      background: var(--dark);
+      color: var(--fg);
+      line-height: 1.65;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ────────────────── NAV ────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+      background: rgba(14,14,12,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.35s, border-color 0.35s;
+    }
+    nav.light-nav {
+      background: rgba(247,245,241,0.94);
+      border-bottom-color: var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-h);
+      font-weight: 700; font-size: 20px;
+      letter-spacing: -0.5px;
+      color: #fff; text-decoration: none;
+      transition: color 0.35s;
+      flex-shrink: 0;
+    }
+    nav.light-nav .nav-logo { color: var(--fg); }
+    .nav-logo span { color: var(--accent); }
+    .nav-tabs {
+      display: flex; gap: 4px; list-style: none;
+    }
+    .nav-tabs button {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font-b); font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      padding: 6px 16px; border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: 0.2px;
+    }
+    nav.light-nav .nav-tabs button { color: var(--muted); }
+    .nav-tabs button:hover { color: #fff; background: rgba(255,255,255,0.07); }
+    nav.light-nav .nav-tabs button:hover { color: var(--fg); background: rgba(0,0,0,0.05); }
+    .nav-tabs button.active { color: #fff; background: rgba(255,255,255,0.1); }
+    nav.light-nav .nav-tabs button.active { color: var(--fg); background: rgba(0,0,0,0.07); }
+    .nav-tabs button.active::after {
+      content: ''; display: block; height: 2px;
+      background: var(--accent); border-radius: 1px;
+      margin-top: 3px;
+    }
+    .nav-right a {
+      font-family: var(--font-m); font-size: 11px;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav.light-nav .nav-right a { color: var(--muted); }
+    .nav-right a:hover { color: var(--accent); }
+
+    /* ────────────────── PAGE SYSTEM ────────────────── */
+    .page { display: none; min-height: 100vh; padding-top: 60px; }
+    .page.active { display: block; }
+    .container { max-width: 940px; margin: 0 auto; padding: 0 48px; }
+    .section-label {
+      font-family: var(--font-m); font-size: 10px;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 14px; display: block;
+    }
+
+    /* ────────────────── HOME ────────────────── */
+    #page-home { background: var(--dark); color: #fff; }
+
+    .home-hero {
+      padding: 100px 48px 60px;
+      max-width: 940px; margin: 0 auto;
+    }
+    .home-hero .eyebrow {
+      font-family: var(--font-m); font-size: 11px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 28px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .home-hero .eyebrow::before {
+      content: ''; width: 24px; height: 1px;
+      background: var(--accent); flex-shrink: 0;
+    }
+    .home-hero h1 {
+      font-family: var(--font-h);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 700; letter-spacing: -3px; line-height: 0.92;
+      margin-bottom: 36px;
+    }
+    .home-hero h1 .accent { color: var(--accent); }
+    .home-hero .tagline {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 300; color: rgba(255,255,255,0.55);
+      max-width: 600px; line-height: 1.6; margin-bottom: 48px;
+    }
+    .home-hero .tagline em {
+      font-style: normal; color: rgba(255,255,255,0.85);
+    }
+
+    /* Globe */
+    .globe-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px 0 60px;
+    }
+    #globe-canvas {
+      width: 380px; height: 380px;
+      cursor: grab;
+    }
+    #globe-canvas:active { cursor: grabbing; }
+    .globe-caption {
+      margin-top: 20px; text-align: center;
+      font-family: var(--font-m); font-size: 11px;
+      color: rgba(255,255,255,0.25); letter-spacing: 1px;
+    }
+    .globe-caption .lived {
+      color: var(--accent2);
+    }
+    .globe-caption .current {
+      color: var(--accent);
+    }
+
+    /* CTA row */
+    .home-cta {
+      max-width: 940px; margin: 0 auto;
+      padding: 0 48px 80px;
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; font-family: var(--font-b);
+      padding: 10px 22px; border-radius: 4px;
+      text-decoration: none; border: 1.5px solid;
+      transition: all 0.2s; cursor: pointer; letter-spacing: 0.1px;
+    }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { background: #b03518; border-color: #b03518; }
+    .btn-ghost { background: transparent; color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.15); }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .btn-dark { background: transparent; color: var(--fg); border-color: var(--border); }
+    .btn-dark:hover { border-color: var(--fg); }
+
+    /* Quick stack */
+    .home-stack {
+      max-width: 940px; margin: 0 auto;
+      padding: 0 48px 100px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 40px;
+    }
+    .home-stack .label {
+      font-family: var(--font-m); font-size: 10px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.2); margin-bottom: 16px;
+    }
+    .stack-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      font-family: var(--font-m); font-size: 11px;
+      padding: 5px 12px; border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ────────────────── ABOUT ────────────────── */
+    #page-about { background: var(--bg); }
+
+    .about-hero {
+      padding: 80px 0 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .about-hero h1 {
+      font-family: var(--font-h);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700; letter-spacing: -2px; line-height: 1.05;
+      margin-bottom: 24px;
+    }
+    .about-hero .lead {
+      font-size: 17px; color: #444; max-width: 580px;
+      line-height: 1.75; font-weight: 300;
+    }
+    .about-hero .lead strong { font-weight: 500; color: var(--fg); }
+
+    .about-body { padding: 60px 0; }
+    .about-two-col {
+      display: grid; grid-template-columns: 3fr 2fr; gap: 64px;
+      margin-bottom: 72px;
+    }
+    .about-text p {
+      font-size: 15px; color: #333; line-height: 1.85;
+      margin-bottom: 20px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-facts { display: flex; flex-direction: column; gap: 0; }
+    .fact {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .fact:first-child { border-top: 1px solid var(--border); }
+    .fact-label {
+      font-family: var(--font-m); font-size: 10px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 4px;
+    }
+    .fact-value {
+      font-family: var(--font-h); font-size: 15px; font-weight: 600;
+    }
+    .fact-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* Passions */
+    .passions-title {
+      font-family: var(--font-h);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700; letter-spacing: -1.5px;
+      margin-bottom: 40px;
+    }
+    .passions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 80px;
+    }
+    .passion-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 32px;
+      transition: border-color 0.2s;
+    }
+    .passion-card:hover { border-color: var(--accent); }
+    .passion-icon { font-size: 28px; margin-bottom: 16px; }
+    .passion-card h4 {
+      font-family: var(--font-h); font-size: 16px;
+      font-weight: 600; margin-bottom: 10px;
+    }
+    .passion-card p {
+      font-size: 13px; color: var(--muted); line-height: 1.7;
+    }
+
+    /* Music mini section */
+    .music-mini {
+      background: var(--fg); color: #fff;
+      padding: 56px 0;
+      margin: 0 -48px;
+      padding-left: 48px; padding-right: 48px;
+    }
+    .music-mini h3 {
+      font-family: var(--font-h);
+      font-size: 22px; font-weight: 600; letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+    .music-mini p { font-size: 14px; color: rgba(255,255,255,0.5); max-width: 540px; line-height: 1.7; }
+    .music-mini .lastfm-note {
+      margin-top: 20px;
+      font-family: var(--font-m); font-size: 11px;
+      color: rgba(255,255,255,0.2);
+    }
+    .music-mini .lastfm-note a { color: var(--accent2); text-decoration: none; }
+    #recent-tracks-about { list-style: none; margin-top: 24px; }
+    .track-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .track-row:last-child { border-bottom: none; }
+    .track-row img { width: 34px; height: 34px; border-radius: 3px; background: #222; object-fit: cover; }
+    .track-row-info { flex: 1; min-width: 0; }
+    .track-row-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-row-artist { font-size: 11px; color: rgba(255,255,255,0.35); }
+    .eq-anim { display: flex; align-items: center; gap: 2px; }
+    .eq-anim span { width: 2px; height: 10px; background: var(--accent); border-radius: 1px; animation: eq 0.8s ease-in-out infinite alternate; }
+    .eq-anim span:nth-child(2) { animation-delay: 0.15s; height: 6px; }
+    .eq-anim span:nth-child(3) { animation-delay: 0.3s; height: 14px; }
+    @keyframes eq { from { transform: scaleY(0.25); } to { transform: scaleY(1); } }
+
+    /* ────────────────── PROJECTS ────────────────── */
+    #page-projects { background: var(--bg); }
+
+    .projects-hero {
+      padding: 80px 0 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .projects-hero h1 {
+      font-family: var(--font-h);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700; letter-spacing: -2px;
+    }
+    .projects-hero p {
+      font-size: 15px; color: var(--muted); margin-top: 12px;
+      max-width: 520px; line-height: 1.7;
+    }
+
+    .projects-list { padding: 60px 0 100px; }
+
+    .project-block {
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: 48px; padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .project-block:last-child { border-bottom: none; }
+    .project-meta { position: sticky; top: 80px; }
+    .project-num {
+      font-family: var(--font-m); font-size: 11px;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .project-meta h3 {
+      font-family: var(--font-h); font-size: 22px;
+      font-weight: 700; letter-spacing: -0.5px; line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .project-badge {
+      display: inline-block;
+      font-family: var(--font-m); font-size: 10px;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 2px; margin-bottom: 16px;
+    }
+    .badge-hackathon { background: rgba(200,64,31,0.1); color: var(--accent); border: 1px solid rgba(200,64,31,0.2); }
+    .badge-research   { background: rgba(0,0,0,0.04); color: var(--muted); border: 1px solid var(--border); }
+    .badge-ml        { background: rgba(79,70,229,0.08); color: #4F46E5; border: 1px solid rgba(79,70,229,0.15); }
+    .badge-thesis    { background: rgba(0,0,0,0.04); color: var(--muted); border: 1px solid var(--border); }
+    .project-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .proj-link {
+      font-family: var(--font-m); font-size: 11px;
+      padding: 5px 12px; border: 1px solid var(--border);
+      border-radius: 3px; text-decoration: none; color: var(--fg);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .proj-link:hover { border-color: var(--accent); color: var(--accent); }
+    .project-content p {
+      font-size: 15px; color: #333; line-height: 1.85;
+      margin-bottom: 20px;
+    }
+    .project-content p:last-of-type { margin-bottom: 0; }
+    .tech-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; }
+    .tech-tag {
+      font-family: var(--font-m); font-size: 11px;
+      padding: 4px 10px; border-radius: 3px;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* ────────────────── CV ────────────────── */
+    #page-cv { background: var(--bg); }
+
+    .cv-hero {
+      padding: 80px 0 48px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .cv-hero h1 {
+      font-family: var(--font-h);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700; letter-spacing: -2px;
+    }
+    .cv-hero p {
+      font-size: 14px; color: var(--muted); margin-top: 10px; max-width: 460px;
+    }
+    .cv-body { padding: 48px 0 100px; }
+
+    /* Accordion */
+    .cv-section { border-bottom: 1px solid var(--border); }
+    .cv-section:first-child { border-top: 1px solid var(--border); }
+    .cv-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 0; cursor: pointer; user-select: none;
+    }
+    .cv-header:hover .cv-h-title { color: var(--accent); }
+    .cv-h-label {
+      font-family: var(--font-m); font-size: 10px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 4px;
+    }
+    .cv-h-title {
+      font-family: var(--font-h); font-size: 20px;
+      font-weight: 700; letter-spacing: -0.5px;
+      transition: color 0.2s;
+    }
+    .cv-toggle {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: var(--muted);
+      transition: transform 0.3s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .cv-section.open .cv-toggle { transform: rotate(45deg); background: var(--fg); color: #fff; border-color: var(--fg); }
+    .cv-body-inner {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .cv-section.open .cv-body-inner { max-height: 2000px; }
+    .cv-content { padding-bottom: 36px; }
+
+    /* CV items */
+    .cv-item { margin-bottom: 36px; }
+    .cv-item:last-child { margin-bottom: 0; }
+    .cv-item-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 4px;
+    }
+    .cv-item-title {
+      font-family: var(--font-h); font-size: 17px;
+      font-weight: 700; letter-spacing: -0.3px;
+    }
+    .cv-item-date {
+      font-family: var(--font-m); font-size: 11px;
+      color: var(--muted); white-space: nowrap;
+    }
+    .cv-item-sub {
+      font-size: 13px; color: var(--accent); margin-bottom: 12px;
+      font-style: italic;
+    }
+    .cv-item p {
+      font-size: 14px; color: #444; line-height: 1.8; margin-bottom: 10px;
+    }
+    .cv-item p:last-child { margin-bottom: 0; }
+    .cv-item-points { list-style: none; margin-top: 10px; }
+    .cv-item-points li {
+      font-size: 14px; color: #444; line-height: 1.8;
+      padding-left: 18px; position: relative; margin-bottom: 6px;
+    }
+    .cv-item-points li::before {
+      content: '○'; position: absolute; left: 0;
+      color: var(--accent); font-size: 10px; top: 4px;
+    }
+    .cv-item-points li strong { font-weight: 600; color: var(--fg); }
+
+    /* Skills grid */
+    .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .skill-group h5 {
+      font-family: var(--font-m); font-size: 10px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .skill-tag {
+      font-family: var(--font-m); font-size: 11px;
+      padding: 4px 10px; border-radius: 3px;
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    /* ────────────────── FOOTER ────────────────── */
+    .site-footer {
+      text-align: center; padding: 36px 48px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-family: var(--font-m); font-size: 11px;
+      color: rgba(255,255,255,0.2);
+      background: var(--dark);
+    }
+    .site-footer.light-footer {
+      background: var(--bg); border-top-color: var(--border);
+      color: var(--muted);
+    }
+
+    /* ────────────────── RESPONSIVE ────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-right { display: none; }
+      .container { padding: 0 24px; }
+      .home-hero, .home-cta, .home-stack { padding-left: 24px; padding-right: 24px; }
+      .home-hero { padding-top: 60px; }
+      .home-hero h1 { letter-spacing: -2px; }
+      #globe-canvas { width: 280px; height: 280px; }
+      .about-two-col { grid-template-columns: 1fr; gap: 40px; }
+      .passions-grid { grid-template-columns: 1fr 1fr; }
+      .project-block { grid-template-columns: 1fr; gap: 24px; }
+      .project-meta { position: static; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .cv-hero { flex-direction: column; align-items: flex-start; }
+      .music-mini { margin: 0; padding: 40px 24px; }
+    }
+    @media (max-width: 480px) {
+      .passions-grid { grid-template-columns: 1fr; }
+      .nav-tabs button { padding: 6px 10px; font-size: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════ NAV ══════════════════════ -->
+  <nav id="main-nav">
+    <a href="#" class="nav-logo" onclick="showPage('home')">G<span>.</span></a>
+    <ul class="nav-tabs">
+      <li><button id="tab-home"     class="active"  onclick="showPage('home')">Home</button></li>
+      <li><button id="tab-about"               onclick="showPage('about')">About</button></li>
+      <li><button id="tab-projects"            onclick="showPage('projects')">Projects</button></li>
+      <li><button id="tab-cv"                  onclick="showPage('cv')">CV</button></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://github.com/gioma2121" target="_blank">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════ HOME ══════════════════════ -->
+  <div class="page active" id="page-home">
+    <div class="home-hero">
+      <div class="eyebrow">Eindhoven · Data Science &amp; AI</div>
+      <h1>Giorgio<br>Maria<br>Maioli<span class="accent">.</span></h1>
+      <p class="tagline">
+        <em>Probably on VSCode, in the gym or in the kitchen,</em><br>
+        always with the headphones on. Music enthusiast.
+      </p>
+    </div>
+
+    <div class="globe-wrap">
+      <canvas id="globe-canvas"></canvas>
+      <p class="globe-caption">
+        <span class="lived">Rome · Vilnius</span> &nbsp;→&nbsp; <span class="current">Eindhoven ✦</span>
+        &nbsp;&nbsp;|&nbsp;&nbsp; More countries coming soon
+      </p>
+    </div>
+
+    <div class="home-cta">
+      <button class="btn btn-primary" onclick="showPage('projects')">See my work</button>
+      <button class="btn btn-ghost"   onclick="showPage('cv')">Read my CV</button>
+      <a href="https://github.com/gioma2121" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+      <a href="mailto:gio.88.m@gmail.com" class="btn btn-ghost">Get in touch</a>
+    </div>
+
+    <div class="home-stack">
+      <div class="label">Stack</div>
+      <div class="stack-pills">
+        <span class="pill">Python</span>
+        <span class="pill">PyTorch</span>
+        <span class="pill">LangChain</span>
+        <span class="pill">Hugging Face</span>
+        <span class="pill">Multi-agent systems</span>
+        <span class="pill">LLMs</span>
+        <span class="pill">LoRA</span>
+        <span class="pill">RAG</span>
+        <span class="pill">Scikit-learn</span>
+        <span class="pill">Spark</span>
+        <span class="pill">SQL</span>
+        <span class="pill">R</span>
+      </div>
+    </div>
+
+    <div style="background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); padding: 32px 48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; max-width:100%;">
+      <div style="display:flex; gap:48px; flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--font-h); font-size:28px; font-weight:700; letter-spacing:-1px;">109<span style="font-size:14px; color:rgba(255,255,255,0.3); font-weight:400;">/110</span></div>
+          <div style="font-family:var(--font-m); font-size:10px; letter-spacing:1.5px; color:rgba(255,255,255,0.25); text-transform:uppercase; margin-top:4px;">BSc grade</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-h); font-size:28px; font-weight:700; letter-spacing:-1px;">3.79</div>
+          <div style="font-family:var(--font-m); font-size:10px; letter-spacing:1.5px; color:rgba(255,255,255,0.25); text-transform:uppercase; margin-top:4px;">GPA</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-h); font-size:28px; font-weight:700; letter-spacing:-1px;">6<span style="font-size:14px; color:rgba(255,255,255,0.3); font-weight:400;"> mo early</span></div>
+          <div style="font-family:var(--font-m); font-size:10px; letter-spacing:1.5px; color:rgba(255,255,255,0.25); text-transform:uppercase; margin-top:4px;">Graduated</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-h); font-size:28px; font-weight:700; letter-spacing:-1px;">&lt;24<span style="font-size:14px; color:rgba(255,255,255,0.3); font-weight:400;">h</span></div>
+          <div style="font-family:var(--font-m); font-size:10px; letter-spacing:1.5px; color:rgba(255,255,255,0.25); text-transform:uppercase; margin-top:4px;">Hackathon build</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer">© 2026 Giorgio Maria Maioli · gioma2121.github.io</div>
+  </div>
+
+  <!-- ══════════════════════ ABOUT ══════════════════════ -->
+  <div class="page" id="page-about">
+    <div style="background: var(--bg); min-height: 100vh;">
+      <div class="container">
+
+        <div class="about-hero">
+          <span class="section-label">About</span>
+          <h1>Beyond the<br>bullet points.</h1>
+          <p class="lead">
+            I'm Giorgio. I study <strong>Data Science and Artificial Intelligence</strong> at
+            Eindhoven University of Technology, I work part-time at <strong>Picnic</strong>,
+            and I spend a good chunk of my remaining brain cycles thinking about music, food,
+            and how to improve at things I care about.
+          </p>
+        </div>
+
+        <div class="about-body">
+          <div class="about-two-col">
+            <div class="about-text">
+              <p>
+                I grew up in Rome, studied Economics and Big Data there (graduating 6 months
+                ahead of schedule with a 109/110), spent a semester in Vilnius on an Erasmus+
+                merit scholarship, did an AI engineering internship in Rome at BIP where I
+                built a full multi-agent document generation platform from scratch, and then
+                moved to Eindhoven to do my MSc at TU/e. Make of that trajectory what you will.
+              </p>
+              <p>
+                The through-line is that I'm genuinely interested in making things work well.
+                Not "good enough" — actually well. At BIP I took a project from concept to
+                a fully functional PoC in three months without anyone holding my hand. That's
+                not a flex, it's just how I prefer to operate. Give me a real problem and space
+                to figure it out.
+              </p>
+              <p>
+                I'm part of the Honors Academy at TU/e, which means I take on research and
+                projects beyond the standard curriculum. I have a thing for interpretability,
+                for understanding not just whether a model works but why and where it fails.
+                My BSc thesis was literally about surfacing regime-dependent patterns in 40 years
+                of macrofinancial data. I like going below the surface.
+              </p>
+              <p>
+                Outside of the technical stuff: I lift, I cook, I read, I listen to a lot of
+                music, and I'm planning to spend this summer on the Pamir Highway, which is
+                either a great idea or exactly the kind of thing that sounds better in theory.
+                Probably both.
+              </p>
+            </div>
+
+            <div class="about-facts">
+              <div class="fact">
+                <div class="fact-label">Currently</div>
+                <div class="fact-value">MSc DS &amp; AI</div>
+                <div class="fact-sub">TU/e Eindhoven · 2025–2027</div>
+              </div>
+              <div class="fact">
+                <div class="fact-label">Also</div>
+                <div class="fact-value">Picnic</div>
+                <div class="fact-sub">1–2 days a week, keeping things real</div>
+              </div>
+              <div class="fact">
+                <div class="fact-label">Track</div>
+                <div class="fact-value">Honors Academy</div>
+                <div class="fact-sub">Extended research programme</div>
+              </div>
+              <div class="fact">
+                <div class="fact-label">Languages</div>
+                <div class="fact-value">Italian · English</div>
+                <div class="fact-sub">Native · C1</div>
+              </div>
+              <div class="fact">
+                <div class="fact-label">Next</div>
+                <div class="fact-value">Pamir Highway 🏔</div>
+                <div class="fact-sub">Summer 2026 · tickets already bought</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Passions -->
+          <h2 class="passions-title">Things I actually<br>care about.</h2>
+          <div class="passions-grid">
+            <div class="passion-card">
+              <div class="passion-icon">🏋️</div>
+              <h4>Gym &amp; Movement</h4>
+              <p>Three sessions a week, no excuses. Currently working on fixing forward head posture (occupational hazard of spending too much time on a laptop) and doing daily mobility work. Consistency over motivation — sport taught me that before anything else did.</p>
+            </div>
+            <div class="passion-card">
+              <div class="passion-icon">🍳</div>
+              <h4>Cooking</h4>
+              <p>Somewhere between "I can feed myself" and "I actually know what I'm doing." Working through proper cooking books, not for the recipes but for the technique. The goal is to understand why something works, not just copy it. Same approach as ML, honestly.</p>
+            </div>
+            <div class="passion-card">
+              <div class="passion-icon">🎵</div>
+              <h4>Music</h4>
+              <p>Always on. All genres, no shame. Music is also where one of my current projects lives — there's something interesting about treating listening patterns as data. More on that in Projects.</p>
+            </div>
+            <div class="passion-card">
+              <div class="passion-icon">📖</div>
+              <h4>Reading</h4>
+              <p>Try to read every day. I track what I finish and keep a proper list. Mostly non-fiction but not exclusively. The habit of sitting with a book and not having a screen in my face is one I'm actively protecting.</p>
+            </div>
+            <div class="passion-card">
+              <div class="passion-icon">🌍</div>
+              <h4>Travel</h4>
+              <p>Rome grew me up. Vilnius showed me that life is genuinely different elsewhere in ways you can't read about. Eindhoven is teaching me Dutch pragmatism. Pamir Highway this summer — the kind of trip that requires a proper checklist and a healthy tolerance for uncertainty.</p>
+            </div>
+            <div class="passion-card">
+              <div class="passion-icon">🧠</div>
+              <h4>Self-improvement</h4>
+              <p>In a real way, not a self-help-book way. I keep a Notion system, I do therapy, I try to sleep 8 hours, and I spend time thinking about what actually makes the difference between someone who improves and someone who stays the same. Still figuring it out.</p>
+            </div>
+          </div>
+
+          <!-- Music mini -->
+          <div class="music-mini">
+            <span class="section-label" style="color:var(--accent2);">Music</span>
+            <h3>What's been playing.</h3>
+            <p>Connect Last.fm to show your real listening history here. Until then — you can trust that the headphones are always on.</p>
+            <ul id="recent-tracks-about">
+              <li style="font-size:13px; color:rgba(255,255,255,0.25); padding:12px 0; font-style:italic;">
+                Set up Last.fm + Scrobbles app to see live listening history →
+              </li>
+            </ul>
+            <p class="lastfm-note">
+              Via Last.fm · <a href="https://last.fm/user/YOUR_USERNAME" target="_blank">follow me</a>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="site-footer light-footer">© 2026 Giorgio Maria Maioli</div>
+  </div>
+
+  <!-- ══════════════════════ PROJECTS ══════════════════════ -->
+  <div class="page" id="page-projects">
+    <div style="background: var(--bg); min-height: 100vh;">
+      <div class="container">
+        <div class="projects-hero">
+          <span class="section-label">Projects</span>
+          <h1>Things I've built.</h1>
+          <p>A mix of hackathon sprints, research work, and course projects that got interesting enough to keep going.</p>
+        </div>
+
+        <div class="projects-list">
+
+          <!-- MeditaSplit -->
+          <div class="project-block">
+            <div class="project-meta">
+              <div class="project-num">01</div>
+              <span class="project-badge badge-hackathon">Hackathon · 24h</span>
+              <h3>MeditaSplit</h3>
+              <p style="font-size:13px; color:var(--muted); line-height:1.6;">Agentic bill-splitting app. bunq Hackathon.</p>
+              <div class="project-links">
+                <a href="https://github.com/gioma2121" class="proj-link" target="_blank">GitHub ↗</a>
+              </div>
+            </div>
+            <div class="project-content">
+              <p>Built in under 24 hours at the bunq Hackathon. Photo your receipt, Claude Vision reads it, you split it however you want in natural language, and real Bunq payment requests go out. No manual entry, no awkward group chat maths.</p>
+              <p>The part I'm most proud of: the agentic loop runs 8 reasoning turns with 2 tools and financial guardrails that actually work. Voice input across 3 input modes. Multi-turn conversational edits so you can say "actually take 5 euros off mine" and it handles it gracefully. Designed every system prompt and the full agent architecture myself.</p>
+              <div class="tech-row">
+                <span class="tech-tag">Claude Vision</span>
+                <span class="tech-tag">Bunq API</span>
+                <span class="tech-tag">Multi-agent</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Voice input</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subgroup Discovery -->
+          <div class="project-block">
+            <div class="project-meta">
+              <div class="project-num">02</div>
+              <span class="project-badge badge-research">Research</span>
+              <h3>Subgroup Discovery with LLMs for Sentiment Analysis</h3>
+              <p style="font-size:13px; color:var(--muted); line-height:1.6;">Where do models systematically fail?</p>
+              <div class="project-links">
+                <a href="https://github.com/gioma2121" class="proj-link" target="_blank">GitHub ↗</a>
+              </div>
+            </div>
+            <div class="project-content">
+              <p>Sentiment classification models work fine on average. The interesting question is: where do they consistently fail? Not randomly — systematically.</p>
+              <p>I built a framework that uses LLMs to auto-generate features from unstructured text data, then runs subgroup discovery to find the cohorts where the model underperforms. Think of it as teaching models to audit themselves. The LLM-generated features capture patterns that hand-crafted features miss, which is where it gets interesting.</p>
+              <div class="tech-row">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">LLMs</span>
+                <span class="tech-tag">Scikit-learn</span>
+                <span class="tech-tag">NLP</span>
+                <span class="tech-tag">Subgroup discovery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medical AI -->
+          <div class="project-block">
+            <div class="project-meta">
+              <div class="project-num">03</div>
+              <span class="project-badge badge-ml">ML Engineering</span>
+              <h3>Fine-Tuning CNNs, ViTs &amp; LLMs for Medical AI</h3>
+              <p style="font-size:13px; color:var(--muted); line-height:1.6;">Interpretability in high-stakes settings.</p>
+            </div>
+            <div class="project-content">
+              <p>Fine-tuned ResNet-18 (87.1% accuracy) and ViT-B/16 on DermaMNIST, then interpreted the predictions via GradCAM and Attention Rollout. The interesting result wasn't the accuracy number — it was exposing clinically relevant failure modes on the Melanoma/Nevi pair where the model was confidently wrong.</p>
+              <p>Then went further: applied LoRA via Optuna HPO to fine-tune Gemma-3-270M-IT on MedMCQA, gaining 8.6pp over the random baseline. Built a LlamaIndex RAG pipeline on top that eliminated hallucinations on knowledge-intensive medical queries. The kind of result that makes you trust a system more, not just report better numbers.</p>
+              <div class="tech-row">
+                <span class="tech-tag">PyTorch</span>
+                <span class="tech-tag">ViT</span>
+                <span class="tech-tag">ResNet</span>
+                <span class="tech-tag">LoRA</span>
+                <span class="tech-tag">Optuna</span>
+                <span class="tech-tag">LlamaIndex</span>
+                <span class="tech-tag">GradCAM</span>
+                <span class="tech-tag">Gemma 3</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BSc Thesis -->
+          <div class="project-block">
+            <div class="project-meta">
+              <div class="project-num">04</div>
+              <span class="project-badge badge-thesis">BSc Thesis</span>
+              <h3>Macrofinancial Effects of US Political Cycles</h3>
+              <p style="font-size:13px; color:var(--muted); line-height:1.6;">40 years of data. Deep learning. Political cycles.</p>
+            </div>
+            <div class="project-content">
+              <p>Can deep learning surface how US political cycles shape macrofinancial dynamics? That was the question. I built and compared Temporal Fusion Transformer and LSTM models on a 40-year daily dataset combining economic indicators, financial time series, and sentiment data.</p>
+              <p>TFT outperformed LSTM by around 6x — not because LSTMs are bad, but because TFT's attention mechanism is actually suited to the multi-horizon forecasting problem. Then I interpreted the results via TFT native attention weights and LIME to surface regime-dependent patterns across political cycles. That interpretability layer is what made the thesis worth reading.</p>
+              <div class="tech-row">
+                <span class="tech-tag">PyTorch</span>
+                <span class="tech-tag">TFT</span>
+                <span class="tech-tag">LSTM</span>
+                <span class="tech-tag">LIME</span>
+                <span class="tech-tag">Time series</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">R</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="site-footer light-footer">© 2026 Giorgio Maria Maioli</div>
+  </div>
+
+  <!-- ══════════════════════ CV ══════════════════════ -->
+  <div class="page" id="page-cv">
+    <div style="background: var(--bg); min-height: 100vh;">
+      <div class="container">
+        <div class="cv-hero">
+          <div>
+            <span class="section-label">CV</span>
+            <h1>Giorgio Maria<br>Maioli.</h1>
+            <p>Eindhoven, NL · gio.88.m@gmail.com · linkedin: giorgio maria maioli</p>
+          </div>
+          <a href="./giorgio_maria_maioli_cv_may2026.pdf" download class="btn btn-primary" style="flex-shrink:0;">
+            Download PDF ↓
+          </a>
+        </div>
+
+        <div class="cv-body">
+
+          <!-- Education -->
+          <div class="cv-section" id="cv-education">
+            <div class="cv-header" onclick="toggleCV('cv-education')">
+              <div>
+                <div class="cv-h-label">01</div>
+                <div class="cv-h-title">Education</div>
+              </div>
+              <div class="cv-toggle">+</div>
+            </div>
+            <div class="cv-body-inner">
+              <div class="cv-content">
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">Eindhoven University of Technology</div>
+                    <div class="cv-item-date">Sept 2025 · Exp July 2027</div>
+                  </div>
+                  <div class="cv-item-sub">MSc Honours in Data Science &amp; Artificial Intelligence · Eindhoven, NL</div>
+                  <p>Currently in my first year of the MSc, enrolled in the Honours track which means an extra research component on top of the standard curriculum. Courses so far include Generative AI Models, Deep Learning, Machine Learning Engineering, and Big Data Management — real courses with real depth, not the lightweight versions.</p>
+                  <p>Eindhoven was a deliberate choice: TU/e has a strong applied research culture and a tight link to industry that suited what I was looking for after a more economics-heavy undergraduate.</p>
+                </div>
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">Università degli Studi Roma Tre</div>
+                    <div class="cv-item-date">Oct 2022 · March 2025</div>
+                  </div>
+                  <div class="cv-item-sub">BS in Economics and Big Data · Final grade 109/110 · GPA 3.79 · Rome, IT</div>
+                  <p>Graduated with the highest distinction short of 110, six months ahead of the standard schedule. The degree combined quantitative economics with applied data science — a combination that turned out to be genuinely useful rather than a compromise. Completed a Minor in Data Science on top of the main curriculum.</p>
+                  <p>My BSc thesis on macrofinancial effects of US political cycles via deep learning came out of this period. It's the project I'm most proud of from this chapter.</p>
+                </div>
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">Mykolas Romeris University</div>
+                    <div class="cv-item-date">Aug 2023 · Jan 2024</div>
+                  </div>
+                  <div class="cv-item-sub">Erasmus+ Merit Scholarship · Vilnius, Lithuania</div>
+                  <p>Selected for an Erasmus+ merit scholarship — one of the competitive ones that goes beyond the standard mobility grant. Six months in Vilnius: academically stimulating, personally transformative in the way that living somewhere genuinely different always is. Came back with a broadened perspective and a strong opinion on Lithuanian winters.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience -->
+          <div class="cv-section" id="cv-experience">
+            <div class="cv-header" onclick="toggleCV('cv-experience')">
+              <div>
+                <div class="cv-h-label">02</div>
+                <div class="cv-h-title">Experience</div>
+              </div>
+              <div class="cv-toggle">+</div>
+            </div>
+            <div class="cv-body-inner">
+              <div class="cv-content">
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">AI Engineer Intern · BIP</div>
+                    <div class="cv-item-date">Apr 2025 · Jul 2025</div>
+                  </div>
+                  <div class="cv-item-sub">Business Integration Partners · Rome, IT</div>
+                  <p>My first proper industry role, and it was a real one. BIP is a large management and technology consultancy, and my project was to architect and build a full-stack multi-agent platform for dynamic document generation. No template, no guardrails — just a problem and three months to build something that worked.</p>
+                  <ul class="cv-item-points">
+                    <li>Architected and developed the full platform end-to-end, managing the project autonomously from concept to a functioning PoC in three months. The platform dynamically generates complex documents using a multi-agent architecture.</li>
+                    <li>Designed a novel two-stage generation pipeline: first a <strong>multimodal LLM</strong> synthesizes source PDFs into a structured "Knowledge Exoskeleton" — a clean, high-quality representation of the source material — which then serves as context for generation. The quality improvement over naive RAG was significant.</li>
+                    <li>Built a modular backend with an <strong>AgentFactory</strong> for dynamic prompt engineering and a <strong>ProjectManager</strong> for data persistence and session management. Modularity was intentional: the system was designed to extend, not just to demo.</li>
+                  </ul>
+                </div>
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">Operations · Picnic</div>
+                    <div class="cv-item-date">2025 · Present</div>
+                  </div>
+                  <div class="cv-item-sub">Eindhoven, NL · 1–2 days per week</div>
+                  <p>Working part-time at Picnic alongside my MSc. Good for staying grounded — there's something useful about working in a high-throughput logistics operation while studying AI systems. Keeps the "real world" part of the picture sharp.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Projects -->
+          <div class="cv-section" id="cv-projects">
+            <div class="cv-header" onclick="toggleCV('cv-projects')">
+              <div>
+                <div class="cv-h-label">03</div>
+                <div class="cv-h-title">Research &amp; Projects</div>
+              </div>
+              <div class="cv-toggle">+</div>
+            </div>
+            <div class="cv-body-inner">
+              <div class="cv-content">
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">MeditaSplit · bunq Hackathon</div>
+                    <div class="cv-item-date">2025</div>
+                  </div>
+                  <div class="cv-item-sub">Agentic Bill-Splitting App · &lt;24 hours</div>
+                  <ul class="cv-item-points">
+                    <li>End-to-end agentic app: photo receipt → <strong>Claude Vision</strong> parsing → real Bunq payment requests, with voice input and multi-turn conversational edits.</li>
+                    <li>Designed the full agentic loop (8 reasoning turns, 2 tools, hard financial guardrails) and all system prompts across 3 input modes.</li>
+                  </ul>
+                </div>
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">Subgroup Discovery with LLMs for Sentiment Analysis</div>
+                  </div>
+                  <ul class="cv-item-points">
+                    <li>Framework using LLMs to auto-generate features for unstructured data, identifying subgroups where sentiment classification models systematically underperform.</li>
+                  </ul>
+                </div>
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">ML Engineering: Fine-Tuning CNNs, ViTs and LLMs for Medical AI</div>
+                  </div>
+                  <ul class="cv-item-points">
+                    <li>Fine-tuned ResNet-18 (87.1%) and ViT-B/16 on DermaMNIST; interpreted predictions via GradCAM and Attention Rollout, exposing clinically relevant failure modes on the Melanoma/Nevi pair.</li>
+                    <li>Applied <strong>LoRA</strong> via Optuna HPO to fine-tune Gemma-3-270M-IT on MedMCQA (+8.6pp over random baseline); built a LlamaIndex RAG pipeline eliminating hallucinations on knowledge-intensive queries.</li>
+                  </ul>
+                </div>
+                <div class="cv-item">
+                  <div class="cv-item-header">
+                    <div class="cv-item-title">BSc Thesis: Macrofinancial Effects of US Political Cycles via Deep Learning</div>
+                  </div>
+                  <ul class="cv-item-points">
+                    <li>Compared TFT and LSTM models on a 40-year daily dataset of economic, financial, and sentiment indicators. TFT achieved ~6× better performance over the LSTM baseline.</li>
+                    <li>Interpreted results via TFT native attention weights and LIME, surfacing regime-dependent patterns across political cycles.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="cv-section" id="cv-skills">
+            <div class="cv-header" onclick="toggleCV('cv-skills')">
+              <div>
+                <div class="cv-h-label">04</div>
+                <div class="cv-h-title">Skills</div>
+              </div>
+              <div class="cv-toggle">+</div>
+            </div>
+            <div class="cv-body-inner">
+              <div class="cv-content">
+                <div class="skills-grid">
+                  <div class="skill-group">
+                    <h5>Programming</h5>
+                    <div class="skill-tags">
+                      <span class="skill-tag">Python</span>
+                      <span class="skill-tag">R</span>
+                      <span class="skill-tag">SQL</span>
+                      <span class="skill-tag">MATLAB</span>
+                    </div>
+                  </div>
+                  <div class="skill-group">
+                    <h5>AI &amp; ML Frameworks</h5>
+                    <div class="skill-tags">
+                      <span class="skill-tag">PyTorch</span>
+                      <span class="skill-tag">Lightning</span>
+                      <span class="skill-tag">scikit-learn</span>
+                      <span class="skill-tag">TensorFlow</span>
+                      <span class="skill-tag">Keras</span>
+                      <span class="skill-tag">Optuna</span>
+                      <span class="skill-tag">Hugging Face</span>
+                      <span class="skill-tag">LangChain</span>
+                      <span class="skill-tag">LangGraph</span>
+                    </div>
+                  </div>
+                  <div class="skill-group">
+                    <h5>Data Science</h5>
+                    <div class="skill-tags">
+                      <span class="skill-tag">Pandas</span>
+                      <span class="skill-tag">NumPy</span>
+                      <span class="skill-tag">SciPy</span>
+                      <span class="skill-tag">Matplotlib</span>
+                      <span class="skill-tag">LIME</span>
+                      <span class="skill-tag">SHAP</span>
+                      <span class="skill-tag">LoRA</span>
+                    </div>
+                  </div>
+                  <div class="skill-group">
+                    <h5>Data &amp; Infrastructure</h5>
+                    <div class="skill-tags">
+                      <span class="skill-tag">MySQL</span>
+                      <span class="skill-tag">Oracle SQL</span>
+                      <span class="skill-tag">ChromaDB</span>
+                      <span class="skill-tag">Spark</span>
+                      <span class="skill-tag">Hadoop</span>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top:28px; padding-top:24px; border-top:1px solid var(--border);">
+                  <div class="skill-group">
+                    <h5>Languages</h5>
+                    <div class="skill-tags">
+                      <span class="skill-tag">Italian · Native</span>
+                      <span class="skill-tag">English · C1</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="site-footer light-footer">© 2026 Giorgio Maria Maioli</div>
+  </div>
+
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+    integrity="sha384-mZEya3Tz/CcmgzO19ANwnIVJPCBh3tLkZYEJFa4RqQYUIN5JXv3JO6lSZNRzO9q"
+    crossorigin="anonymous"></script>
+
+  <script>
+    /* ═══════════════════════ PAGE SWITCHING ═══════════════════════ */
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+      document.getElementById('page-' + name).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+
+      const nav = document.getElementById('main-nav');
+      if (name === 'home') {
+        nav.classList.remove('light-nav');
+      } else {
+        nav.classList.add('light-nav');
+      }
+      window.scrollTo(0, 0);
+    }
+
+    /* ═══════════════════════ GLOBE ═══════════════════════ */
+    (function initGlobe() {
+      const canvas = document.getElementById('globe-canvas');
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      const W = 380, H = 380;
+      const scene    = new THREE.Scene();
+      const camera   = new THREE.PerspectiveCamera(45, W / H, 0.01, 100);
+      camera.position.z = 2.6;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(W, H);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Lights
+      scene.add(new THREE.AmbientLight(0xffffff, 0.12));
+      const sun = new THREE.DirectionalLight(0xffffff, 0.85);
+      sun.position.set(5, 3, 5);
+      scene.add(sun);
+      const fill = new THREE.DirectionalLight(0x4466aa, 0.25);
+      fill.position.set(-4, -2, -3);
+      scene.add(fill);
+
+      // Globe group
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Sphere
+      const sphereGeo = new THREE.SphereGeometry(1, 64, 64);
+      const sphereMat = new THREE.MeshPhongMaterial({
+        color:     0x0d1521,
+        emissive:  0x040810,
+        shininess: 20,
+        specular:  0x112244,
+      });
+      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+      group.add(sphere);
+
+      // Atmosphere
+      const atmoGeo = new THREE.SphereGeometry(1.09, 64, 64);
+      const atmoMat = new THREE.MeshPhongMaterial({
+        color: 0x1a4a8a,
+        side: THREE.BackSide,
+        transparent: true,
+        opacity: 0.18,
+      });
+      group.add(new THREE.Mesh(atmoGeo, atmoMat));
+
+      // Grid lines
+      const gridGeo  = new THREE.SphereGeometry(1.002, 28, 18);
+      const wireGeo  = new THREE.WireframeGeometry(gridGeo);
+      const wireMat  = new THREE.LineBasicMaterial({
+        color: 0x1a3a6b, transparent: true, opacity: 0.1
+      });
+      group.add(new THREE.LineSegments(wireGeo, wireMat));
+
+      // lat/lng → 3D
+      function ll(lat, lng, r) {
+        const phi   = (90 - lat) * Math.PI / 180;
+        const theta = (lng + 180) * Math.PI / 180;
+        return new THREE.Vector3(
+          -r * Math.sin(phi) * Math.cos(theta),
+           r * Math.cos(phi),
+           r * Math.sin(phi) * Math.sin(theta)
+        );
+      }
+
+      // Markers
+      // LIVED: bright accent — CURRENT: accent + pulse — VISITED: dim (add yours below)
+      const markerData = [
+        { lat: 51.4416, lng:  5.4697, color: 0xC8401F, size: 0.028, pulse: true,  name: 'Eindhoven' },
+        { lat: 41.9028, lng: 12.4964, color: 0xE8956D, size: 0.022, pulse: false, name: 'Rome' },
+        { lat: 54.6872, lng: 25.2797, color: 0xE8956D, size: 0.022, pulse: false, name: 'Vilnius' },
+        // VISITED — add your countries here with color: 0x445566, size: 0.014, pulse: false
+        // Example: { lat: 48.8566, lng: 2.3522, color: 0x445566, size: 0.014, pulse: false, name: 'Paris' },
+      ];
+
+      const markers = markerData.map(m => {
+        const pos  = ll(m.lat, m.lng, 1.012);
+        const normal = pos.clone().normalize();
+
+        // Dot
+        const dotGeo = new THREE.SphereGeometry(m.size, 10, 10);
+        const dotMat = new THREE.MeshBasicMaterial({ color: m.color });
+        const dot    = new THREE.Mesh(dotGeo, dotMat);
+        dot.position.copy(pos);
+        sphere.add(dot);
+
+        // Pulse ring
+        let ring = null;
+        if (m.pulse) {
+          const rGeo = new THREE.RingGeometry(m.size * 1.4, m.size * 2.2, 24);
+          const rMat = new THREE.MeshBasicMaterial({
+            color: m.color, side: THREE.DoubleSide,
+            transparent: true, opacity: 0.7,
+          });
+          ring = new THREE.Mesh(rGeo, rMat);
+          ring.position.copy(pos);
+          ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+          sphere.add(ring);
+        }
+
+        return { dot, ring, pulse: m.pulse };
+      });
+
+      // Interaction: drag to rotate
+      let isDragging = false, prevX = 0, prevY = 0;
+      let autoRotate = true, autoTimer = null;
+
+      canvas.addEventListener('mousedown', e => {
+        isDragging = true; prevX = e.clientX; prevY = e.clientY;
+        autoRotate = false;
+        clearTimeout(autoTimer);
+      });
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        autoTimer = setTimeout(() => autoRotate = true, 2000);
+      });
+      canvas.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const dx = e.clientX - prevX;
+        const dy = e.clientY - prevY;
+        group.rotation.y += dx * 0.008;
+        group.rotation.x += dy * 0.006;
+        group.rotation.x = Math.max(-1.2, Math.min(1.2, group.rotation.x));
+        prevX = e.clientX; prevY = e.clientY;
+      });
+      canvas.addEventListener('touchstart', e => {
+        prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+        autoRotate = false; clearTimeout(autoTimer);
+      });
+      canvas.addEventListener('touchmove', e => {
+        const dx = e.touches[0].clientX - prevX;
+        const dy = e.touches[0].clientY - prevY;
+        group.rotation.y += dx * 0.008;
+        group.rotation.x += dy * 0.006;
+        prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+      });
+      canvas.addEventListener('touchend', () => {
+        autoTimer = setTimeout(() => autoRotate = true, 2000);
+      });
+
+      // Animate
+      function animate() {
+        requestAnimationFrame(animate);
+        if (autoRotate) group.rotation.y += 0.0025;
+
+        const t = Date.now() * 0.003;
+        markers.forEach(({ ring, pulse }) => {
+          if (pulse && ring) {
+            const s = 1 + 0.6 * Math.abs(Math.sin(t));
+            ring.scale.setScalar(s);
+            ring.material.opacity = 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(t));
+          }
+        });
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
+
+    /* ═══════════════════════ CV ACCORDION ═══════════════════════ */
+    function toggleCV(id) {
+      const section = document.getElementById(id);
+      section.classList.toggle('open');
+    }
+
+    /* ═══════════════════════ LAST.FM (optional) ═══════════════════════ */
+    // Replace these with your real credentials
+    const LASTFM_USER    = 'YOUR_LASTFM_USERNAME';
+    const LASTFM_API_KEY = 'YOUR_LASTFM_API_KEY';
+
+    async function loadTracks(listId) {
+      if (LASTFM_USER === 'YOUR_LASTFM_USERNAME') return;
+      try {
+        const url  = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=5`;
+        const data = await (await fetch(url)).json();
+        const tracks = data.recenttracks?.track || [];
+        const ul = document.getElementById(listId);
+        if (!ul) return;
+        ul.innerHTML = '';
+        tracks.slice(0, 5).forEach(t => {
+          const now   = t['@attr']?.nowplaying === 'true';
+          const img   = t.image?.[1]?.['#text'] || '';
+          const name  = t.name || '';
+          const artist = t.artist?.['#text'] || '';
+          ul.innerHTML += `
+            <li class="track-row">
+              ${img ? `<img src="${img}" alt="" />` : '<div style="width:34px;height:34px;border-radius:3px;background:#222;flex-shrink:0;"></div>'}
+              <div class="track-row-info">
+                <div class="track-row-name">${name}</div>
+                <div class="track-row-artist">${artist}</div>
+              </div>
+              ${now ? '<div class="eq-anim"><span></span><span></span><span></span></div>' : ''}
+            </li>`;
+        });
+      } catch(e) {}
+    }
+    loadTracks('recent-tracks-about');
+  </script>
+
+</body>
+</html>
