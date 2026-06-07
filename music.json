@@ -1,0 +1,96 @@
+[
+  {
+    "album": "In Rainbows",
+    "artist": "Radiohead",
+    "year": 2007,
+    "rating": 10,
+    "macroGenre": "Alternative",
+    "subgenres": [
+      "art rock"
+    ],
+    "lastfm": "https://www.last.fm/music/Radiohead/In+Rainbows",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/dd/50/c7/dd50c790-99ac-d3d0-5ab8-e3891fb8fd52/634904032463.png/600x600bb.jpg"
+  },
+  {
+    "album": "Kuuchuu Camp",
+    "artist": "Fishmans",
+    "year": 1996,
+    "rating": 9.5,
+    "macroGenre": "Rock",
+    "subgenres": [],
+    "lastfm": "https://www.last.fm/music/Fishmans/Kuuchuu+Camp",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/41/2a/6b/412a6bcb-68ac-e2f1-9598-198ffa36cdaf/00602567908593.rgb.jpg/600x600bb.jpg"
+  },
+  {
+    "album": "Blonde",
+    "artist": "Frank Ocean",
+    "year": 2016,
+    "rating": 9.5,
+    "macroGenre": "R&B/Soul",
+    "subgenres": [],
+    "lastfm": "https://www.last.fm/music/Frank+Ocean/Blonde",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/42/62/50/426250f9-7e39-f907-687c-442caa436636/dj.nhptxziz.jpg/600x600bb.jpg"
+  },
+  {
+    "album": "The Lamb Lies Down on Broadway (2007 Stereo Mix)",
+    "artist": "Genesis",
+    "year": 1974,
+    "rating": 9,
+    "macroGenre": "Rock",
+    "subgenres": [],
+    "lastfm": "https://www.last.fm/music/Genesis/The+Lamb+Lies+Down+on+Broadway+%282007+Stereo+Mix%29",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/44/1d/e7/441de7e6-4e8d-9739-0a94-dc6013263620/mzi.vkykexny.jpg/600x600bb.jpg"
+  },
+  {
+    "album": "This Is Happening",
+    "artist": "LCD Soundsystem",
+    "year": 2010,
+    "rating": 9,
+    "macroGenre": "Dance",
+    "subgenres": [
+      "house"
+    ],
+    "lastfm": "https://www.last.fm/music/LCD+Soundsystem/This+Is+Happening",
+    "cover": null
+  },
+  {
+    "album": "Fantasma (Remastered)",
+    "artist": "Cornelius",
+    "year": 1997,
+    "rating": 9,
+    "macroGenre": "Rock",
+    "subgenres": [],
+    "lastfm": "https://www.last.fm/music/Cornelius/Fantasma+%28Remastered%29",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/20/5e/d0/205ed0cf-8af1-385a-8dce-ee2400632d9a/859721636049_cover.jpg/600x600bb.jpg"
+  },
+  {
+    "album": "Talkie Walkie",
+    "artist": "Air",
+    "year": 2004,
+    "rating": 8.5,
+    "macroGenre": "Electronic",
+    "subgenres": [],
+    "lastfm": "https://www.last.fm/music/Air/Talkie+Walkie",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/25/b2/53/25b253de-e213-3fa9-6fc8-8cdc633dabcf/0724359663258_1800x1800_360dpi.jpg/600x600bb.jpg"
+  },
+  {
+    "album": "black british music (2025)",
+    "artist": "Jim Legxacy",
+    "year": 2025,
+    "rating": 8.5,
+    "macroGenre": "Hip-Hop",
+    "subgenres": [],
+    "lastfm": "https://www.last.fm/music/Jim+Legxacy/black+british+music+%282025%29",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9d/6c/62/9d6c6235-499c-fd1a-bf02-ba4cd531a09e/26UMGIM31059.rgb.jpg/600x600bb.jpg"
+  },
+  {
+    "album": "velocity : design : comfort.",
+    "artist": "Sweet Trip",
+    "year": 2003,
+    "rating": 8,
+    "macroGenre": "Electronic",
+    "subgenres": [],
+    "lastfm": "https://www.last.fm/music/Sweet+Trip/velocity+%3A+design+%3A+comfort.",
+    "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c3/e8/4c/c3e84cec-9489-62af-2fad-4c76cc4836e7/mzi.dlnvjlfx.jpg/600x600bb.jpg"
+  }
+]

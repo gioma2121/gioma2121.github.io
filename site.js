@@ -153,65 +153,89 @@
     key:  "426d38ea661c3a0408dc588f669c4d5a",
   };
   const fallbackTracks = [
-    { name: "Syncing with Last.fm…", artist: "@giooooo11", when: "", art: "" },
+    { name: "Syncing with Last.fm…", artist: "@giooooo11", when: "", art: "", url: "https://www.last.fm/user/giooooo11" },
   ];
 
-  function renderNow(tr) {
-    const art = $(".now-art");
-    const meta = $(".now-meta");
-    if (!art || !meta) return;
-    if (tr.art) art.innerHTML = `<img src="${tr.art}" alt="">`;
-    meta.querySelector(".t").textContent = tr.name;
-    meta.querySelector(".a").textContent = tr.artist;
-    const state = $(".now-state");
-    if (state) state.innerHTML = tr.nowplaying
-      ? `<span class="eq"><i></i><i></i><i></i><i></i></span> Now playing`
-      : `Last played`;
-  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
   function renderRecent(list) {
     const wrap = $(".recent-list");
     if (!wrap) return;
     wrap.innerHTML = list.map(t => `
-      <div class="trk">
-        <div class="ti">${t.art ? `<img src="${t.art}" alt="">` : ""}</div>
+      <a class="trk${t.nowplaying ? " playing" : ""}" href="${t.url || "#"}" target="_blank" rel="noopener">
+        <div class="ti">${t.art ? `<img src="${t.art}" alt="" loading="lazy">` : ""}</div>
         <div class="tn"><b>${escapeHtml(t.name)}</b><span>${escapeHtml(t.artist)}</span></div>
-        <div class="tt">${escapeHtml(t.when)}</div>
-      </div>`).join("");
+        <div class="tt">${t.nowplaying ? "● now" : escapeHtml(t.when)}</div>
+      </a>`).join("");
   }
-  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+  function setRecentState(txt){ const s = $(".recent-state"); if (s) s.textContent = txt; }
 
   async function loadLastfm() {
-    // render fallback first
     renderRecent(fallbackTracks);
     if (!LASTFM.user || !LASTFM.key) return;
     try {
-      const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM.user}&api_key=${LASTFM.key}&format=json&limit=8`;
+      const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM.user}&api_key=${LASTFM.key}&format=json&limit=4`;
       const r = await fetch(url);
       const data = await r.json();
       const items = (data.recenttracks?.track || []).map(t => ({
         name: t.name,
         artist: t.artist?.["#text"] || t.artist?.name || "",
         art: (t.image?.find(i => i.size === "large")?.["#text"]) || "",
+        url: t.url || "",
         nowplaying: t["@attr"]?.nowplaying === "true",
         when: t["@attr"]?.nowplaying ? "now" : timeAgo(t.date?.uts),
       }));
-      if (items.length) { renderNow(items[0]); renderRecent(items.slice(0, 7)); }
-      else lastfmUnavailable();
+      if (items.length) {
+        setRecentState(items[0].nowplaying ? "Now playing" : "Last 3 scrobbles");
+        renderRecent(items.slice(0, 3));
+      } else lastfmUnavailable();
     } catch (e) { lastfmUnavailable(); }
   }
   function lastfmUnavailable() {
-    const meta = $(".now-meta");
-    if (meta) { meta.querySelector(".t").textContent = "Headphones on"; meta.querySelector(".a").textContent = "history paused — check @giooooo11"; }
-    renderRecent([{ name: "Last.fm history unavailable right now", artist: "the music never stops though", when: "", art: "" }]);
+    setRecentState("Recently");
+    renderRecent([{ name: "Last.fm history paused right now", artist: "the music never stops though", when: "", art: "", url: "https://www.last.fm/user/giooooo11" }]);
   }
   function timeAgo(uts) {
     if (!uts) return "—";
     const s = Date.now() / 1000 - Number(uts);
+    if (s < 60) return "just now";
     if (s < 3600) return Math.floor(s / 60) + "m ago";
     if (s < 86400) return Math.floor(s / 3600) + "h ago";
     return Math.floor(s / 86400) + "d ago";
   }
   loadLastfm();
+
+  /* ---------- Album wall (music.json — "on heavy rotation") ---------- */
+  async function loadAlbums() {
+    const wall = document.getElementById("album-wall");
+    if (!wall) return;
+    try {
+      const r = await fetch("music.json");
+      const albums = await r.json();
+      wall.innerHTML = albums.map((a, i) => {
+        const title = String(a.album).replace(/\s*\([^)]*\)\s*$/, "").trim();
+        const cover = a.cover
+          ? `<img src="${a.cover}" alt="${escapeHtml(title)}" loading="lazy">`
+          : `<span class="album-ph">${escapeHtml(a.artist)}</span>`;
+        const genre = a.macroGenre ? `<span class="album-genre">${escapeHtml(a.macroGenre)}</span>` : "";
+        return `
+        <a class="album" href="${a.lastfm}" target="_blank" rel="noopener" style="--i:${i}">
+          <div class="album-cover">
+            ${cover}
+            <span class="album-rating">${a.rating}</span>
+            ${genre}
+          </div>
+          <div class="album-meta">
+            <b>${escapeHtml(title)}</b>
+            <span>${escapeHtml(a.artist)} · ${a.year}</span>
+          </div>
+        </a>`;
+      }).join("");
+    } catch (e) {
+      wall.innerHTML = `<p class="albums-fail">Album list couldn't load right now — see <a href="https://www.last.fm/user/giooooo11" target="_blank" rel="noopener">@giooooo11</a>.</p>`;
+    }
+  }
+  loadAlbums();
 
   /* ---------- Card glow tracking ---------- */
   $$(".card").forEach(c => {
