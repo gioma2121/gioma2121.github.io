@@ -240,7 +240,7 @@ a { color: inherit; text-decoration: none; }
 
 .hero-portrait { position: relative; }
 .hero-portrait image-slot { width: 100%; height: clamp(280px, 38vh, 420px); border: 1px solid var(--line); }
-.hero-portrait .portrait-img { width: 100%; height: clamp(280px, 38vh, 420px); object-fit: cover; border-radius: 14px; border: 1px solid var(--line); display: block; }
+.hero-portrait .portrait-img { width: 100%; height: clamp(280px, 38vh, 420px); object-fit: cover; object-position: center 15%; border-radius: 14px; border: 1px solid var(--line); display: block; }
 .portrait-tag { position: absolute; bottom: 12px; left: 12px;
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
   background: color-mix(in oklab, var(--bg) 70%, transparent); backdrop-filter: blur(6px);
