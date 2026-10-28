@@ -28,29 +28,6 @@
     $$(".theme-toggle").forEach(b => b.addEventListener("click", toggleTheme));
   });
 
-  /* ---------- Custom cursor ---------- */
-  if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduce) {
-    const dot = document.createElement("div");
-    const ring = document.createElement("div");
-    dot.className = "cursor-dot"; ring.className = "cursor-ring";
-    document.body.append(dot, ring);
-    let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
-    addEventListener("mousemove", e => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = `translate(${mx}px, ${my}px)`;
-    });
-    (function loop() {
-      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
-      ring.style.transform = `translate(${rx}px, ${ry}px)`;
-      requestAnimationFrame(loop);
-    })();
-    const hov = "a, button, .country, image-slot, .card, .trk, [data-magnetic]";
-    addEventListener("mouseover", e => { if (e.target.closest(hov)) document.body.classList.add("cur-hover"); });
-    addEventListener("mouseout",  e => { if (e.target.closest(hov)) document.body.classList.remove("cur-hover"); });
-    addEventListener("mousedown", () => document.body.classList.add("cur-down"));
-    addEventListener("mouseup",   () => document.body.classList.remove("cur-down"));
-  }
-
   /* ---------- Magnetic buttons ---------- */
   if (!reduce) {
     $$("[data-magnetic]").forEach(el => {
@@ -93,14 +70,12 @@
       $$(".bar > i, .cmp-bar > i", en.target).forEach(b => {
         if (b.dataset.w) b.style.width = b.dataset.w;
       });
-      // elevation line
-      if (en.target.classList.contains("elev")) en.target.classList.add("in");
       // count-up
       $$("[data-count]", en.target).forEach(countUp);
       revObs.unobserve(en.target);
     });
   }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
-  $$(".reveal, .bar > i, .cmp-bar > i, .elev, [data-count]").forEach(el => {
+  $$(".reveal, .bar > i, .cmp-bar > i, [data-count]").forEach(el => {
     // observe nearest reveal container or the element itself
     revObs.observe(el);
   });
@@ -109,7 +84,6 @@
   if (location.search.indexOf("reveal=all") > -1) {
     $$(".reveal").forEach(e => e.classList.add("in"));
     $$(".bar > i, .cmp-bar > i").forEach(b => { if (b.dataset.w) b.style.width = b.dataset.w; });
-    $$(".elev").forEach(e => e.classList.add("in"));
     $$("[data-count]").forEach(el => {
       el.textContent = (el.dataset.prefix || "") + el.dataset.count + (el.dataset.suffix || "");
     });

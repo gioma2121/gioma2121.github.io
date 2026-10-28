@@ -18,7 +18,8 @@
   ctx.scale(dpr, dpr);
 
   // ISO 3166-1 numeric codes
-  const VISITED = new Set([818,792,40,56,100,191,233,246,276,300,348,380,428,440,499,528,578,616,620,674,703,724,826,336]);
+  const VISITED = new Set([818,792,40,56,100,191,233,246,276,300,348,380,428,440,499,528,578,616,620,674,703,724,826,336,762,860,417,784]); // + Tajikistan, Uzbekistan, Kyrgyzstan, UAE
+  const VISITED_NAMES = new Set(["Kosovo"]); // no ISO numeric id in world-atlas
   const LIVED = new Set([380, 440, 528]); // Italy, Lithuania, Netherlands
   const HERE = 528;                        // Netherlands — flashing
 
@@ -28,15 +29,32 @@
     return v.startsWith("#") ? v : ACCENT_FALLBACK;
   }
 
-  const projection = d3.geoOrthographic().scale(94).translate([100, 100]).clipAngle(90).rotate([-10, -24, 0]);
+  const projection = d3.geoOrthographic().scale(94).translate([100, 100]).clipAngle(90).rotate([-10, -28, 0]);
   const path = d3.geoPath(projection, ctx);
   const graticule = d3.geoGraticule10();
   const sphere = { type: "Sphere" };
   let countries = null, raf = null, t0 = performance.now();
+  // Orientation is driven by state so it can be dragged (left/right) and then drift again
+  let lon = -10, lat = -28, lastFrame = performance.now();
+  let dragging = false, dragX = 0, resumeAt = 0;
+  canvas.style.cursor = "grab"; canvas.style.touchAction = "pan-y";
+  canvas.addEventListener("pointerdown", e => {
+    dragging = true; dragX = e.clientX; canvas.setPointerCapture(e.pointerId); canvas.style.cursor = "grabbing";
+  });
+  canvas.addEventListener("pointermove", e => {
+    if (!dragging) return;
+    lon += (e.clientX - dragX) * 0.55; dragX = e.clientX;
+    if (reduce) draw(performance.now());
+  });
+  const endDrag = () => { dragging = false; resumeAt = performance.now() + 1800; canvas.style.cursor = "grab"; };
+  canvas.addEventListener("pointerup", endDrag);
+  canvas.addEventListener("pointercancel", endDrag);
 
   function draw(now) {
     const t = (now - t0) / 1000;
-    if (!reduce) projection.rotate([-10 + t * 7, -22 + Math.sin(t * 0.25) * 7, 0]);
+    const dt = Math.min(0.05, (now - lastFrame) / 1000); lastFrame = now;
+    if (!reduce && !dragging && now > resumeAt) lon += dt * 7;
+    projection.rotate([lon, lat, 0]);
     ctx.clearRect(0, 0, SIZE, SIZE);
 
     // ocean / sphere — off-white
@@ -56,7 +74,7 @@
         ctx.beginPath(); path(f);
         if (id === HERE) { ctx.globalAlpha = pulse; ctx.fillStyle = acc; ctx.fill(); ctx.globalAlpha = 1; }
         else if (LIVED.has(id)) { ctx.fillStyle = acc; ctx.fill(); }
-        else if (VISITED.has(id)) { ctx.fillStyle = "#9a9286"; ctx.fill(); }
+        else if (VISITED.has(id) || VISITED_NAMES.has(f.properties && f.properties.name)) { ctx.fillStyle = "#9a9286"; ctx.fill(); }
         else { ctx.fillStyle = "#dcd3c2"; ctx.fill(); }
         ctx.strokeStyle = "rgba(86,78,62,0.34)"; ctx.lineWidth = 0.4; ctx.stroke();
       }
@@ -81,7 +99,7 @@
   // pause when off-screen (battery)
   if (!reduce && "IntersectionObserver" in window) {
     new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting && !raf && countries) { t0 = performance.now(); raf = requestAnimationFrame(draw); }
+      if (e.isIntersecting && !raf && countries) { t0 = performance.now(); lastFrame = t0; raf = requestAnimationFrame(draw); }
       else if (!e.isIntersecting && raf) { cancelAnimationFrame(raf); raf = null; }
     }), { threshold: 0 }).observe(canvas);
   }
